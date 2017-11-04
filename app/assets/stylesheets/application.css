@@ -13,9 +13,12 @@
  *= require_tree .
  *= require_self
  */
- body {
+ html,body {
    background-color: #5ceed3;
    font-family: 'Roboto', sans-serif;
+   height: 100%;
+   margin: 0;
+   padding: 0;
  }
 
  .logo {
@@ -32,4 +35,11 @@
 
  .background {
    background-color: #5ceed3;
+ }
+
+ /* Always set the map height explicitly to define the size of the div
+    * element that contains the map. */
+
+ #map {
+   height: 100%;
  }
