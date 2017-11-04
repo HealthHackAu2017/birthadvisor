@@ -9,7 +9,10 @@
       if (response.status === 'connected') {
         console.log('Logged in');
         var button = document.getElementById('fb-login-button');
+        var review = document.getElementById('review');
         button.style.display = 'none';
+        review.style.display = 'block';
+        // window.location = '/ratings';
       } else {
         console.log('Not logged in');
       }
@@ -47,3 +50,8 @@
   scope="public_profile,email"
   onlogin="checkLoginState();">
 </fb:login-button>
+
+<div id="review" style="display:none">
+  <label>Enter your review</label>
+  <input type="text"></input>
+</div>
