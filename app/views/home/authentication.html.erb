@@ -36,7 +36,9 @@
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 
-   window.addEventListener("load", checkLoginState);
+   window.addEventListener("load", function() {
+     setTimeout(checkLoginState, 500);
+   });
 </script>
 
 
