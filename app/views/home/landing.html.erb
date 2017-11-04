@@ -10,16 +10,30 @@
 </div>
 <div id="map"></div>
 <script>
+  var gMap;
   function initMap() {
-
-    var map = new google.maps.Map(document.getElementById('map'), {
+    var mapSetup = {
       zoom: 6,
       center: {
         lat: -28.024,
         lng: 140.887
       }
-    });
+    };
 
+    //If a postcode has been searched before, use that on load
+    if (localStorage) {
+      var lastSearchString = localStorage.getItem('lastSearch');
+      if (lastSearchString) {
+        var lastSearch = JSON.parse(lastSearchString);
+        if (lastSearch) {
+          mapSetup.zoom = 15;
+          mapSetup.center = lastSearch;
+        }
+      }
+
+    };
+
+    gMap = new google.maps.Map(document.getElementById('map'), mapSetup);
     var infowindows = [];
 
     function markerClicked(marker) {
@@ -49,7 +63,7 @@
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
-        infowindow.open(map, marker);
+        infowindow.open(gMap, marker);
         infowindows.forEach(function (w) { w.close() });
         infowindows.push(infowindow);
       }
@@ -58,7 +72,7 @@
     var markers = locations.map(function(location, i) {
       // https://developers.google.com/maps/documentation/javascript/markers
       var marker = new google.maps.Marker({
-        map: map,
+        map: gMap,
         position: location.coords,
         label: 'A',
         title: location.title
@@ -69,7 +83,7 @@
     });
 
     // Add a marker clusterer to manage the markers.
-    var markerCluster = new MarkerClusterer(map, markers, {
+    var markerCluster = new MarkerClusterer(gMap, markers, {
       imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
     });
   }
@@ -90,6 +104,34 @@
       }
     }
   ]
+
+
+
+
+
+  //Post code search.
+  var postcodeInput = document.getElementById('postcode');
+  postcodeInput.oninput = function() {
+    if (postcodeInput.value.length !== 4) return;
+
+    var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + postcodeInput.value + ',+Australia&key=AIzaSyDAKNInbNtKbeFdbpd_1galCQFsPRzvhzI';
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener("load", function() {
+      var data = JSON.parse(this.responseText);
+      if (data.status !== 'OK') return;
+      if (!data.results[0]) return;
+      var location = data.results[0].geometry.location;
+
+      gMap.setCenter(location);
+      gMap.setZoom(15);
+
+      if (!localStorage) return;
+      localStorage.setItem('lastSearch', JSON.stringify(location));
+    });
+    oReq.open("GET", url);
+    oReq.send();
+  }
+  postcodeInput.onpropertychange = postcodeInput.oninput; // for IE8
 </script>
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAKNInbNtKbeFdbpd_1galCQFsPRzvhzI&callback=initMap"></script>

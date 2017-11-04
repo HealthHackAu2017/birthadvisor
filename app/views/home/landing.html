@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Birthadvisor</title>
+  <link rel="stylesheet" href="application.css" />
+</head>
+
+<body class="background">
+  <div class="row listing background">
+    <div>
+      <img src="landing-logo.png" class="logo" alt="Birthing mum pic" />
+    </div>
+    <p class="landingbutton">
+      <a href="/authentication">Find centres near you</a>
+      <label for="postcode">Please enter your postcode</label>
+      <input name="postcode" type="text" id="postcode" />
+    </p>
+  </div>
+  <div id="map"></div>
+  <script>
+    var gMap;
+    function initMap() {
+      var mapSetup = {
+        zoom: 6,
+        center: {
+          lat: -28.024,
+          lng: 140.887
+        }
+      };
+
+      if (localStorage) {
+        var lastSearchString = localStorage.getItem('lastSearch');
+        if (lastSearchString) {
+          var lastSearch = JSON.parse(lastSearchString);
+          if (lastSearch) {
+            mapSetup.zoom = 15;
+            mapSetup.center = lastSearch;
+          }
+        }
+
+      };
+
+      gMap = new google.maps.Map(document.getElementById('map'), mapSetup);
+
+      var infowindows = [];
+
+      function markerClicked(marker) {
+        return function() {
+          var contentString = '<div id="content">' +
+            '<div id="siteNotice">' +
+            '</div>' +
+            '<h1 id="firstHeading" class="firstHeading">' + marker.location.title + '</h1>' +
+            '<div id="bodyContent">' +
+            '<p><b>' + marker.location.name + '</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+            'sandstone rock formation in the southern part of the ' +
+            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
+            'south west of the nearest large town, Alice Springs; 450&#160;km ' +
+            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
+            'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
+            'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
+            'Aboriginal people of the area. It has many springs, waterholes, ' +
+            'rock caves and ancient paintings. Uluru is listed as a World ' +
+            'Heritage Site.</p>' +
+            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+            'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+            '(last visited June 22, 2009).</p>' +
+            '</div>' +
+            '</div>';
+
+          // https://developers.google.com/maps/documentation/javascript/infowindows#close
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
+          infowindow.open(gMap, marker);
+          infowindows.forEach(function(w) {
+            w.close()
+          });
+          infowindows.push(infowindow);
+        }
+      }
+
+      var markers = locations.map(function(location, i) {
+        // https://developers.google.com/maps/documentation/javascript/markers
+        var marker = new google.maps.Marker({
+          map: gMap,
+          position: location.coords,
+          label: 'A',
+          title: location.title
+        });
+        marker.location = location;
+        marker.addListener('click', markerClicked(marker));
+        return marker;
+      });
+
+      // Add a marker clusterer to manage the markers.
+      var markerCluster = new MarkerClusterer(gMap, markers, {
+        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+      });
+    }
+    var locations = [{
+        title: 'A hosptial',
+        name: 'Funny Farm',
+        coords: {
+          lat: -31.563910,
+          lng: 147.154312
+        }
+      },
+      {
+        title: 'B hosptial',
+        name: 'Serious Farm',
+        coords: {
+          lat: -33.718234,
+          lng: 150.363181
+        }
+      }
+    ]
+
+    var postcodeInput = document.getElementById('postcode');
+    postcodeInput.oninput = function() {
+      if (postcodeInput.value.length !== 4) return;
+
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + postcodeInput.value + ',+Australia&key=AIzaSyDAKNInbNtKbeFdbpd_1galCQFsPRzvhzI';
+      var oReq = new XMLHttpRequest();
+      oReq.addEventListener("load", function() {
+        var data = JSON.parse(this.responseText);
+        if (data.status !== 'OK') return;
+        if (!data.results[0]) return;
+        var location = data.results[0].geometry.location;
+
+        gMap.setCenter(location);
+        gMap.setZoom(15);
+
+        if (!localStorage) return;
+        localStorage.setItem('lastSearch', JSON.stringify(location));
+      });
+      oReq.open("GET", url);
+      oReq.send();
+    }
+    postcodeInput.onpropertychange = postcodeInput.oninput; // for IE8
+  </script>
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAKNInbNtKbeFdbpd_1galCQFsPRzvhzI&callback=initMap"></script>
+</body>
+
+</html>
