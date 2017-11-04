@@ -19,8 +19,17 @@
  }
 
  .logo {
-   margin-left: auto;
-   margin-right: auto;
-   padding-top: 110px;
+   height: 300px;
+   display: block;
+    margin-left: auto;
+    margin-right: auto;
 
+ }
+
+ .landingbutton {
+   text-align: center;
+ }
+
+ .background {
+   background-color: #5ceed3;
  }

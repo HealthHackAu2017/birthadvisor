@@ -1,19 +1,21 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Birth Advisor</title>
-    <%= csrf_meta_tags %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-
-  </head>
-
-  <body>
-
-
-<div class="row listing">
+<div class="row listing background">
+  <div>
     <%= image_tag "landing-logo.png", class: "logo", alt: "Birthing mum pic"%>
   </div>
+  <p class="landingbutton">
+    <a href="/authentication">Find centres near you</a>
+    <label for="postcode">Please enter your postcode</label>
+    <input name="postcode" type="text" id="postcode"></input>
+    <div id="map"></div>
+  </p>
+  <iframe width="100%" height="100%" frameborder="0" src="https://enfeizhan.carto.com/builder/77d05a9f-c396-4f25-95ba-d1aee45f997e/embed" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+  <script>
+    window.onload = function () {
+      cartodb.createVis('map', 'http://enfeizhan.carto.com/api/v2/viz/77d05a9f-c396-4f25-95ba-d1aee45f997e/viz.json', {
+        center_lat: 43.90,
+        center_lon: -97.55,
+        zoom: 5
+      });
+    }
+  </script>
 </div>
