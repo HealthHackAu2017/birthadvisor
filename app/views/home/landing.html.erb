@@ -25,7 +25,7 @@
       if (lastSearchString) {
         var lastSearch = JSON.parse(lastSearchString);
         if (lastSearch) {
-          mapSetup.zoom = 15;
+          mapSetup.zoom = 10;
           mapSetup.center = lastSearch;
         }
       }
@@ -43,7 +43,7 @@
         ', <b>National Average Caesarean Rate:</b> ' + (marker.location.NationalRate / 10).toFixed(1) +
         ', <b>State Average Caesarean Rate:</b> ' + (marker.location.StateRate / 10).toFixed(1) +
         ', <b>Current Location Caesarean Rate:</b> ' + (marker.location.CaesareanRate/10).toFixed(1) +
-        ',  <a href="/ratings">'+
+        ', <br><a href="/authentication?name=' + marker.location.Hospital + '">'+
         ' Rate your birth experience</a>'
         '.</div></div>';
 
@@ -100,7 +100,7 @@
       var location = data.results[0].geometry.location;
 
       gMap.setCenter(location);
-      gMap.setZoom(15);
+      gMap.setZoom(10);
 
       if (!localStorage)
         return;

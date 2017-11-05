@@ -6,17 +6,17 @@
     var button = document.getElementById('fb-login-button');
     var review = document.getElementById('review');
     button.style.display = 'none';
-    review.style.display = 'block';
-    // window.location = '/ratings';
+    // review.style.display = 'block';
+    window.location = '/ratings?name=' + getParameterByName('name');;
   }
 
   function checkLoginState() {
+    console.log('checkLoginState');
     var loginHack = localStorage.getItem('loginHack');
     if (loginHack === 'true') {
       return loggedIn();
     }
 
-    console.log('checkLoginState');
     FB.getLoginStatus(function(response) {
       console.log(response);
       if (response.status === 'connected') {
@@ -47,9 +47,7 @@
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 
-   window.addEventListener("load", function() {
-     setTimeout(checkLoginState, 500);
-   });
+   setTimeout(checkLoginState, 500);
 
   function getParameterByName(name, url) {
     if (!url) url = window.location.href;
