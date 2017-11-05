@@ -57,6 +57,14 @@
           '(last visited June 22, 2009).</p>' +
           '</div>' +
           '</div>';
+        var contentString = '<div id="content">' +
+          '<div id="siteNotice">' +
+          '</div>' +
+          '<h1 id="firstHeading" class="firstHeading">'+marker.location.Hospital+'</h1>' +
+          '<div id="bodyContent">' +
+          'Description: '+marker.location.description+ 
+          '</div>' +
+          '</div>';
 
         // https://developers.google.com/maps/documentation/javascript/infowindows#close
         var infowindow = new google.maps.InfoWindow({
@@ -75,6 +83,17 @@
         position: location.coords,
         label: 'A',
         title: location.title
+      });
+      marker.location = location;
+      marker.addListener('click', markerClicked(marker));
+      return marker;
+    });
+
+    var markers = locations.map(function(location, i) {
+      // https://developers.google.com/maps/documentation/javascript/markers
+      var marker = new google.maps.Marker({
+        map: gMap,
+        position: {lat: location.Latitude, lng: location.Longitude},
       });
       marker.location = location;
       marker.addListener('click', markerClicked(marker));
@@ -102,7 +121,10 @@
         lng: 150.363181
       }
     }
-  ]
+  ];
+var locations = [
+	{"Albers SQM":6511121403.2302894592,"Hospitalisations":159.0,"CrudeRatePer100000":228.0,"StateRate":257.0,"NationalRate":268.0,"AgeStandardisedRatePer1000":227,"DecileOfAgeStandardisedRatePer1":9.0,"AgeandStandardisedRatePer1000_2":"227","Phone number":"02 6150 7000","Hospital":"Queanbeyan District Hospital & Health Service","Street address":"16 Erin Street","Postcode":"2620","State":"NSW","Website":null,"Description":"Small hospital with an emergency department","Sector":"Public","Beds":"<50","Latitude":-35.347685,"Longitude":149.232294},
+	{"Albers SQM":6511121403.2302894592,"Hospitalisations":159.0,"CrudeRatePer100000":228.0,"StateRate":257.0,"NationalRate":268.0,"AgeStandardisedRatePer1000":227,"DecileOfAgeStandardisedRatePer1":9.0,"AgeandStandardisedRatePer1000_2":"227","Phone number":"02 6150 7000","Hospital":"Queanbeyan District Hospital & Health Service","Street address":"16 Erin Street","Postcode":"2620","State":"NSW","Website":null,"Description":"Small hospital with an emergency department","Sector":"Public","Beds":"<50","Latitude":-35.347685,"Longitude":149.232294}]
 
 
 
