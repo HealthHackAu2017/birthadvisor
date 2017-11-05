@@ -3,8 +3,7 @@
     <%= image_tag "landing-logo.png", class: "logo", alt: "Birthing mum pic"%>
   </div>
   <p class="landingbutton">
-    <a href="/authentication">Find centres near you</a>
-    <label for="postcode">Please enter your postcode</label>
+    <label for="postcode">Find centres near you. Please enter your postcode</label>
     <input name="postcode" type="text" id="postcode"></input>
   </p>
 </div>
@@ -13,7 +12,7 @@
   var gMap;
   function initMap() {
     var mapSetup = {
-      zoom: 6,
+      zoom: 5,
       center: {
         lat: -28.024,
         lng: 140.887
@@ -53,8 +52,8 @@
           'Aboriginal people of the area. It has many springs, waterholes, ' +
           'rock caves and ancient paintings. Uluru is listed as a World ' +
           'Heritage Site.</p>' +
-          '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-          'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+          '<p>Attribution: Uluru, <a href="/ratings">' +
+          'Rate your experience at this hospital</a> ' +
           '(last visited June 22, 2009).</p>' +
           '</div>' +
           '</div>';
