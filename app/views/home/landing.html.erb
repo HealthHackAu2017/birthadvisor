@@ -36,65 +36,41 @@
     var infowindows = [];
 
     function markerClicked(marker) {
-      return function() {
-        var contentString = '<div id="content">' +
-          '<div id="siteNotice">' +
-          '</div>' +
-          '<h1 id="firstHeading" class="firstHeading">'+marker.location.title+'</h1>' +
-          '<div id="bodyContent">' +
-          '<p><b>'+marker.location.name+'</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-          'sandstone rock formation in the southern part of the ' +
-          'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
-          'south west of the nearest large town, Alice Springs; 450&#160;km ' +
-          '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
-          'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
-          'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
-          'Aboriginal people of the area. It has many springs, waterholes, ' +
-          'rock caves and ancient paintings. Uluru is listed as a World ' +
-          'Heritage Site.</p>' +
-          '<p>Attribution: Uluru, <a href="/authentication?name='+marker.location.name+'">' +
-          'Rate your experience at this hospital</a> ' +
-          '(last visited June 22, 2009).</p>' +
-          '</div>' +
-          '</div>';
-// remove the above once this one approved
-        var contentString = '<div id="content">' +
-          '<div id="siteNotice">' +
-          '</div>' +
-          '<h1 id="firstHeading" class="firstHeading">'+marker.location.Hospital+'</h1>' +
-          '<div id="bodyContent">' +
-          'Address: '+marker.location.StreetAddress+', Description: '+marker.location.Description+'.'+
-          '</div>' +
-          '</div>';
+      return function () {
+        var contentString = '<div id="content"><div id="siteNotice"></div><h1 id="firstHeading" class="firstHeading">' + marker.location.Hospital +
+        '</h1><div id="bodyContent"><b>Address:</b> ' + marker.location.StreetAddress +
+        ', <b>Description:</b> ' + marker.location.Description +
+        ', <b>National Average Caesarean Rate:</b> ' + (marker.location.NationalRate / 10).toFixed(1) +
+        ', <b>State Average Caesarean Rate:</b> ' + (marker.location.StateRate / 10).toFixed(1) +
+        ', <b>Current Location Caesarean Rate:</b> ' + (marker.location.CaesareanRate/10).toFixed(1) +
+        '.</div></div>';
 
         // https://developers.google.com/maps/documentation/javascript/infowindows#close
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
+        var infowindow = new google.maps.InfoWindow({content: contentString});
         infowindow.open(gMap, marker);
-        infowindows.forEach(function (w) { w.close() });
+        infowindows.forEach(function (w) {
+          w.close()
+        });
         infowindows.push(infowindow);
       }
     }
 
-    var markers = locations.map(function(location, i) {
+    var markers = locations.map(function (location, i) {
       // https://developers.google.com/maps/documentation/javascript/markers
-      var marker = new google.maps.Marker({
-        map: gMap,
-        position: location.coords,
-        label: 'A',
-        title: location.title
-      });
+      var marker = new google.maps.Marker({map: gMap, position: location.coords, label: 'A', title: location.title});
       marker.location = location;
       marker.addListener('click', markerClicked(marker));
       return marker;
     });
-// remove the above once this one approved
-    var markers = locations.map(function(location, i) {
+    // remove the above once this one approved
+    var markers = locations.map(function (location, i) {
       // https://developers.google.com/maps/documentation/javascript/markers
       var marker = new google.maps.Marker({
         map: gMap,
-        position: {lat: location.Latitude, lng: location.Longitude},
+        position: {
+          lat: location.Latitude,
+          lng: location.Longitude
+        }
       });
       marker.location = location;
       marker.addListener('click', markerClicked(marker));
@@ -102,53 +78,30 @@
     });
 
     // Add a marker clusterer to manage the markers.
-    var markerCluster = new MarkerClusterer(gMap, markers, {
-      imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
-    });
+    var markerCluster = new MarkerClusterer(gMap, markers, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
   }
-  var locations = [{
-      title: 'A hosptial',
-      name: 'Funny Farm',
-      coords: {
-        lat: -31.563910,
-        lng: 147.154312
-      }
-    },
-    {
-      title: 'B hosptial',
-      name: 'Serious Farm',
-      coords: {
-        lat: -33.718234,
-        lng: 150.363181
-      }
-    }
-  ];
-// remove the above once this one approved
-var locations = [
-	{"Albers SQM":6511121403.2302894592,"Hospitalisations":159.0,"CrudeRatePer100000":228.0,"StateRate":257.0,"NationalRate":268.0,"AgeStandardisedRatePer1000":227,"DecileOfAgeStandardisedRatePer1":9.0,"AgeandStandardisedRatePer1000_2":"227","Phone number":"02 6150 7000","Hospital":"Queanbeyan District Hospital & Health Service","StreetAddress":"16 Erin Street","Postcode":"2620","State":"NSW","Website":null,"Description":"Small hospital with an emergency department","Sector":"Public","Beds":"<50","Latitude":-35.347685,"Longitude":149.232294},
-        {"Albers SQM":988247549.5508140326,"Hospitalisations":470.0,"CrudeRatePer100000":289.0,"StateRate":257.0,"NationalRate":268.0,"AgeStandardisedRatePer1000":287,"DecileOfAgeStandardisedRatePer1":4.0,"AgeandStandardisedRatePer1000_2":"287","Phone number":"02 4320 2111","Hospital":"Gosford Hospital","StreetAddress":"76 Holden Street","Postcode":"2250","State":"NSW","Website":"www.cclhd.health.nsw.gov.au\/","Description":"Large metropolitan hospital with an emergency department","Sector":"Public","Beds":"200-500","Latitude":-33.419451,"Longitude":151.340328}
-]
-
-
-
-
-  //Post code search.
+  // var locations = [   {     title: 'A hosptial',     name: 'Funny Farm',     coords: {       lat: -31.563910,       lng: 147.154312     }   }, {     title: 'B hosptial',     name: 'Serious Farm',     coords: {       lat: -33.718234,       lng:
+  // 150.363181     }   } ]; Post code search.
   var postcodeInput = document.getElementById('postcode');
-  postcodeInput.oninput = function() {
-    if (postcodeInput.value.length !== 4) return;
+  postcodeInput.oninput = function () {
+    if (postcodeInput.value.length !== 4)
+      return;
 
     var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + postcodeInput.value + ',+Australia&key=AIzaSyDAKNInbNtKbeFdbpd_1galCQFsPRzvhzI';
     var oReq = new XMLHttpRequest();
-    oReq.addEventListener("load", function() {
+    oReq.addEventListener("load", function () {
       var data = JSON.parse(this.responseText);
-      if (data.status !== 'OK') return;
-      if (!data.results[0]) return;
+      if (data.status !== 'OK')
+        return;
+      if (!data.results[0])
+        return;
       var location = data.results[0].geometry.location;
 
       gMap.setCenter(location);
       gMap.setZoom(15);
 
-      if (!localStorage) return;
+      if (!localStorage)
+        return;
       localStorage.setItem('lastSearch', JSON.stringify(location));
     });
     oReq.open("GET", url);
