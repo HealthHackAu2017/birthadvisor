@@ -1,18 +1,26 @@
 
 
 <script>
+  function loggedIn() {
+    console.log('Logged in');
+    var button = document.getElementById('fb-login-button');
+    var review = document.getElementById('review');
+    button.style.display = 'none';
+    review.style.display = 'block';
+    // window.location = '/ratings';
+  }
 
   function checkLoginState() {
+    var loginHack = localStorage.getItem('loginHack');
+    if (loginHack === 'true') {
+      return loggedIn();
+    }
+
     console.log('checkLoginState');
     FB.getLoginStatus(function(response) {
       console.log(response);
       if (response.status === 'connected') {
-        console.log('Logged in');
-        var button = document.getElementById('fb-login-button');
-        var review = document.getElementById('review');
-        button.style.display = 'none';
-        review.style.display = 'block';
-        // window.location = '/ratings';
+        loggedIn();
       } else {
         console.log('Not logged in');
       }
@@ -42,9 +50,21 @@
    window.addEventListener("load", function() {
      setTimeout(checkLoginState, 500);
    });
+
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+       results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+
 </script>
 
-
+<h1 id="title"></h1>
 <fb:login-button
   id="fb-login-button"
   scope="public_profile,email"
@@ -55,3 +75,9 @@
   <label>Enter your review</label>
   <input type="text"></input>
 </div>
+
+<script>
+var name = getParameterByName('name');
+var title = document.getElementById('title');
+title.innerText = name;
+</script>
